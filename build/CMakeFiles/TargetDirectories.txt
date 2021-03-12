@@ -1,5 +1,0 @@
-/Users/juliemachamer/workspace/sdl-pong/build/CMakeFiles/rebuild_cache.dir
-/Users/juliemachamer/workspace/sdl-pong/build/CMakeFiles/edit_cache.dir
-/Users/juliemachamer/workspace/sdl-pong/build/CMakeFiles/SDL4Pong.dir
-/Users/juliemachamer/workspace/sdl-pong/build/Components/CMakeFiles/rebuild_cache.dir
-/Users/juliemachamer/workspace/sdl-pong/build/Components/CMakeFiles/edit_cache.dir
