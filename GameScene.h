@@ -2,8 +2,8 @@
 #include <SDL.h>
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 960;
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
 #include <iostream>
 #include <cstdlib>
@@ -25,19 +25,20 @@ class GameScene
         void renderer(float delat);
 
         void initScene();
-        void loadField(); 
+
+        void loadImages(); 
 
         void mouseMoved(int mousy);
 
         void event_loop();
 
-        Ball ball;
+        Ball* ball;
         PlayingField* playingField;
         Score score;
         std::vector<Paddle*> paddles; 
 
         SDL_Window *window = nullptr;
-        SDL_Renderer *render = nullptr; 
+        SDL_Renderer *gRenderer = nullptr; 
 
         SDL_Surface* screenSurface = nullptr;
         

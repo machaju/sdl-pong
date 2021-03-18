@@ -5,6 +5,8 @@ GameScene::GameScene() {
 
      playingField = new PlayingField(SCREEN_WIDTH * .9, SCREEN_HEIGHT * .9);
 
+     ball = new Ball(); 
+
     Paddle *p1 = new Paddle(0);
     Paddle *p2 = new Paddle(1);
 
@@ -12,8 +14,8 @@ GameScene::GameScene() {
     paddles.push_back(p2);
 
 
-     SDL_Texture* texture1 = SDL_CreateTextureFromSurface(render, paddles[0]->m_surface);
-     SDL_Texture* texture2 = SDL_CreateTextureFromSurface(render, paddles[1]->m_surface);
+    //  SDL_Texture* texture1 = SDL_CreateTextureFromSurface(render, paddles[0]->m_surface);
+    //  SDL_Texture* texture2 = SDL_CreateTextureFromSurface(render, paddles[1]->m_surface);
 
     
         // create game window 
@@ -36,7 +38,7 @@ void GameScene::initScene()
 
     else{
         // create window
-        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
         if(window == nullptr)
         {
@@ -46,30 +48,43 @@ void GameScene::initScene()
         else{
             std::cout << "Window created successfully!" << std::endl; 
 
-                        // get window surface
-            screenSurface = SDL_GetWindowSurface(window); 
+            //             // get window surface
+            // screenSurface = SDL_GetWindowSurface(window); 
 
-            // fill the surface white
-            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+            // // fill the surface white
+            // SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
-            SDL_UpdateWindowSurface(window);
+            // SDL_UpdateWindowSurface(window);
 
-             //Initialize PNG loading
-            int imgFlags = IMG_INIT_PNG;
-            if( !( IMG_Init( imgFlags ) & imgFlags ) )
+
+            //Create renderer for window
+            gRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+            if( gRenderer == NULL )
             {
-                printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
             }
+            else
+            {
+                //Initialize renderer color
+                SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
-            else{
-                std::cout << "Initialized Image loading!" << std::endl; 
-
-                // add field
-                loadField();
-
-                for(auto it : paddles)
+                //Initialize PNG loading
+                int imgFlags = IMG_INIT_PNG;
+                if( !( IMG_Init( imgFlags ) & imgFlags ) )
                 {
-                    it->loadImage(); 
+                    printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                }
+
+                else{
+                    std::cout << "Initialized Image loading!" << std::endl; 
+
+
+                    loadImages();
+
+                    ball->setStartingPos((  paddles[0]->width + paddles[0]->x), 
+                                    (paddles[0]->height - (paddles[0]->height /2)) );
+
+                
                 }
             }
         
@@ -83,41 +98,31 @@ void GameScene::renderer(float delta)
 {
     //SDL_SetRenderDrawColor(render, 0,0,0,255);
 
-    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+    //Clear screen
+    SDL_RenderClear( gRenderer );
+
+   // SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
     // render ball & board
-
-
-
+    if(ball->initState)
+    { 
+        ball->render(screenSurface);
+    }
+    
 
     // render paddels
     for (auto it : paddles)
     {
         it->setPaddlex(playingField->x, playingField->width);
-        
-        SDL_Rect (rect_dst) {
-            .x = static_cast<int>(it->x), 
-            .y = static_cast<int>(it->y), 
-            .w = it->width, 
-            .h = it->height
-        };  
-        SDL_Rect (rect_src) {
-            .x = 0, 
-            .y = 0, 
-            .w = it->width, 
-            .h = it->height
-        };
-        SDL_BlitSurface( it->m_surface, &rect_src, screenSurface, &rect_dst );
-        
+        it->render(screenSurface);  
     }
+
+    //Update screen
+    SDL_RenderPresent( gRenderer );
 
     SDL_UpdateWindowSurface( window );
 }
 
-void GameScene::loadField()
-{
-
-}
 
 // move the player paddle to be centered with the mouse height 
 void GameScene::mouseMoved(int mousy) {
@@ -126,7 +131,13 @@ void GameScene::mouseMoved(int mousy) {
     {
         if (p->player == 0)
         {
-            p->movePaddle(mousy - (p->height / 2), playingField->y, playingField->height);
+            p->movePaddle(mousy - (p->scaled_height / 2), playingField->y, playingField->height);
+
+            // ball->setStartingPos((  paddles[0]->width + paddles[0]->x), 
+            //                          (mousy - (ball->height/2) ));
+
+            ball->setStartingPos((  paddles[0]->scaled_width + paddles[0]->x), 
+                                     (mousy - (ball->scaled_height/2) ));
         }
     }
 }
@@ -164,4 +175,15 @@ void GameScene::event_loop()
 
         SDL_Delay(16);
     } 
+}
+
+void GameScene::loadImages() {
+    
+    // load paddles 
+    for(auto it : paddles)
+    {
+        it->loadImage(gRenderer); 
+    }
+
+    ball->loadImage(gRenderer); 
 }

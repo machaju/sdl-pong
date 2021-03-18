@@ -9,6 +9,19 @@ Ball::~Ball() {
     
 }
 
+void Ball::loadImage(SDL_Renderer* gRenderer)
+{
+
+    load_image("ball.png", gRenderer);
+    
+}
+
+void Ball::setStartingPos(int startx, int starty)
+{
+    x = startx;
+    y = starty;
+}
+
 // move the ball X amount of pixels per second
 void Ball::move(float seconds) {
     x += dirx * seconds;

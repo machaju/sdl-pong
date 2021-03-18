@@ -2,16 +2,24 @@
 
 Paddle::Paddle(int p) : player(p)
 {
-    loadImage(); 
+  
 
 }
 
 Paddle::~Paddle()
 {
-
-    SDL_FreeSurface( m_surface );
-
     
+}
+
+void Paddle::loadImage(SDL_Renderer* gRenderer)
+{
+  if(player == 0)
+    {
+        load_image("paddle.png", gRenderer);
+    }
+    else{
+        load_image("glasspaddle2.png", gRenderer);
+    }
 }
 // move paddle based on mouse y location
 void Paddle::movePaddle(int y, int pfy, int pfheight) {
@@ -52,22 +60,6 @@ void Paddle::setPaddlex(int pfx, int pfwidth) {
         this->x = pfx + pfwidth;
     }
 }
-
-    void Paddle::loadImage() {
-
-    if(player == 0)
-    {
-        m_surface = IMG_Load("paddle.png");
-    }
-    else{
-        m_surface = IMG_Load("glasspaddle2.png");
-    }
-
-    width = m_surface->w;
-    height = m_surface->h;
-
-}
-
 
 void Paddle::update(float delta) {
 
