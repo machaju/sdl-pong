@@ -1,23 +1,14 @@
 #include "Ball.h"
 
+Ball::Ball() { }
+Ball::~Ball() { }
 
-Ball::Ball() {
-    
+void Ball::initImage(SDL_Renderer* renderer_) {
+    m_renderer = renderer_;
+    loadImage("ball.png");
 }
 
-Ball::~Ball() {
-    
-}
-
-void Ball::loadImage(SDL_Renderer* gRenderer)
-{
-
-    load_image("ball.png", gRenderer);
-    
-}
-
-void Ball::setStartingPos(int startx, int starty)
-{
+void Ball::setStartingPos(int startx, int starty) {
     x = startx;
     y = starty;
 }
@@ -28,89 +19,73 @@ void Ball::move(float seconds) {
     y += diry * seconds;   
 }
 
-
-
 void Ball::setDirection(int newdirx, int newdiry) {
-
     // Normalize the direction vector and multiply with BALL_SPEED
-        float length = std::sqrt(newdirx * newdirx + newdiry * newdiry);
-        dirx = BALL_SPEED * (newdirx / length);
-        diry = BALL_SPEED * (newdiry / length);    
+    float length = std::sqrt(newdirx * newdirx + newdiry * newdiry);
+    dirx = BALL_SPEED * (newdirx / length);
+    diry = BALL_SPEED * (newdiry / length);    
 }
 
-int Ball::detect_paddle_quad(int paddel_loc, int paddle_height)
-{
-
+PQUAD Ball::detectPaddleQuad(int paddel_loc, int paddle_height) {
     // get location on paddle
-    int ball_mid = y + (scaled_height/2);
-    float paddle_collision_loc = ball_mid - paddel_loc;
-    float paddle_quad = paddle_collision_loc/float(paddle_height); 
+    float   paddle_collision_loc =  this->mid() - paddel_loc;
+    float   paddle_quad =           paddle_collision_loc/float(paddle_height); 
 
-    int quad = 2;
+    PQUAD quad = Q3;
     // angle up 
-    if(paddle_quad < .25)
-    {
-        quad = 1;
-        std::cout << " 1st Quad" << std::endl; 
-
-    }
+    if(paddle_quad < .2) {
+        quad = Q1;
+    
     // up mid
-    else if(paddle_quad < .5)
-    {
-        quad = 2;
-        std::cout << " 2nd Quad" << std::endl; 
+    } else if(paddle_quad < .4) {
+        quad = Q2;
 
-    }
+    // center
+    } else if(paddle_quad < .6) {
+        quad = Q3;
+
     // down mid
-    else if(paddle_quad < .75)
-    {
-        quad = 3;
-        std::cout << " 3rd Quad" << std::endl; 
+    } else if(paddle_quad < .8) {
+        quad = Q4;
 
-    }
-    // down 
-    else
-    {
-        quad = 4;
-        std::cout << " 4th Quad" << std::endl; 
-
+    // down
+    } else {
+        quad = Q5;
     }
 
     return quad; 
-
-
     //dirx = dirx * -1; 
 }
 
-void Ball::moveLeft(int quad)
-{
+void Ball::moveLeft(PQUAD quad) {
     dirx = -1;
     moveAngle(quad);
 }
 
-void Ball::moveRight(int quad)
-{
+void Ball::moveRight(PQUAD quad) {
     dirx = 1;
     moveAngle(quad);
-
 }
 
 // TODO: make this more elegant 
-void Ball::moveAngle(int quad)
-{
-       switch(quad)
-    {
-        case 1:
-            diry = -0.2f;
-            break;
-        case 2:
-            diry = -0.1f;
-            break;
-        case 3:
-            diry = 0.1f;
-            break;
-        case 4:
-            diry = 0.2f;
-            break;
+void Ball::moveAngle(PQUAD quad) {
+    float min   = -0.3f;
+    float max   = 0.3f;
+
+    float random    = ((float) rand()) / (float) RAND_MAX;
+    float diff      = max - min;
+    float r         = random * diff;
+    float noise     =  min + r;   
+
+    float newy = 0.0f;  
+
+    switch(quad) {
+        case Q1:     newy = -0.2f;       break;
+        case Q2:     newy = -0.1f;       break;
+        case Q3:     newy = 0.0f;        break;
+        case Q4:     newy = 0.1f;        break;
+        case Q5:     newy = 0.2f;        break;
     }
+
+    diry = newy + noise; 
 }

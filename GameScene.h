@@ -15,33 +15,28 @@ const int SCREEN_HEIGHT = 600;
 #include "Components/Score.h"
 #include "Components/Paddle.h"
 
+enum PLAYERS{PLAYER, AI, PLAYERS_SIZE};
+
 class GameScene
 {
-    public:
+public:
+    GameScene();
+    ~GameScene();
 
-        GameScene();
-        ~GameScene();
+    Ball*                   ball            { nullptr };
+    PlayingField*           playingField    { nullptr };
+    std::vector<Paddle*>    paddles         { }; 
+    std::vector<Score*>     scores          { }; 
 
-        void renderer(float delat);
+    SDL_Window*             window          { nullptr };
+    SDL_Renderer*           m_renderer      { nullptr }; 
+    SDL_Surface*            screenSurface   { nullptr };
 
-        void initScene();
+    void renderer(float delat);
+    void initScene();
+    void loadImages(); 
+    void mouseMoved(int mousy);
 
-        void loadImages(); 
-
-        void mouseMoved(int mousy);
-
-        void event_loop();
-
-        Ball* ball;
-        PlayingField* playingField;
-        Score score;
-        std::vector<Paddle*> paddles; 
-
-        SDL_Window *window = nullptr;
-        SDL_Renderer *gRenderer = nullptr; 
-
-        SDL_Surface* screenSurface = nullptr;
-        
-
+    void event_loop();
 
 };

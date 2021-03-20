@@ -6,35 +6,31 @@
 #include <SDL_image.h>
 #include <iostream>
 
-class Entity{
-
-    public:
+class Entity
+{
+public:
     Entity();
-    ~ Entity();
+    ~Entity();
 
-    void load_image(std::string path, SDL_Renderer* gRenderer); 
+    SDL_Texture*    m_texture       { nullptr }; 
+    SDL_Renderer*   m_renderer      { nullptr };
 
-    void render(SDL_Surface* srcSurface);
+    float   x               { 100 };
+    float   y               { 100 };
+    int     width           { 100 };
+    int     height          { 100 };
+    int     scaled_width    { 100 };
+    int     scaled_height   { 100 };
+    float   m_scale         { 0.5f };       // scale the graphics
 
-    float x = 0;
-    float y = 0;
+public:
+    virtual void    initImage(SDL_Renderer* renderer_) { };
+    virtual void    loadImage(std::string path); 
+    void            render(SDL_Surface* srcSurface);
 
-    int width = 0;
-    int height = 0;
-
-    int scaled_width = 0;
-    int scaled_height = 0;
-    
-    //SDL_Surface* m_surface = nullptr;
-
-    SDL_Texture* m_texture = nullptr; 
-
-    SDL_Renderer* gRenderer;
-
-    // scale the graphics
-    float m_scale = 0.5f;
-
-
+    int     top();
+    int     mid(); 
+    int     bottom();
 };
 
 #endif // SDL4PONG_ENTITY_H

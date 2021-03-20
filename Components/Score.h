@@ -1,6 +1,17 @@
-class Score
+#include <SDL_ttf.h>
+#include "Entity.h"
+
+class Score : public Entity 
 {
-    public:
-        float x, y;     // position of score on teh screen
-        int score;      // the score 
+public:
+    Score();
+    ~Score();
+    
+    TTF_Font*       Sans            { nullptr }; 
+    SDL_Surface*    surfaceMessage  { nullptr };
+    int             score           { 0 };              // the score 
+
+    
+    void initImage(SDL_Renderer* renderer_) override; 
+    void updateScore();        
 };

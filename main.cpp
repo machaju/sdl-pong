@@ -18,12 +18,9 @@
 //  - Render
 
 
-int main(int argc, char* args[])
-{
-
+int main(int argc, char* args[]) {
 
     auto scene = new GameScene(); 
-
     scene->event_loop(); 
 
     return 0;

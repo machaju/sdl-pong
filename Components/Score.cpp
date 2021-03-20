@@ -1,2 +1,39 @@
 #include "Score.h"
 
+
+Score::Score() { 
+
+}
+Score::~Score() { }
+
+void Score::initImage(SDL_Renderer* renderer_) {
+    m_renderer = renderer_; 
+
+    Sans = TTF_OpenFont("Barlow-Bold.ttf", 24); //this opens a font style and sets a size
+    if (Sans == NULL) {
+        printf( "Unable to load font. Error: %s \n",  TTF_GetError() );
+    }
+    SDL_Color color = { 0,0,0 };
+
+    // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+    surfaceMessage = TTF_RenderText_Blended(Sans, std::to_string(score).c_str(), color ); 
+    // Now you can convert it into a texture
+    m_texture = SDL_CreateTextureFromSurface(m_renderer, surfaceMessage); 
+
+    if (m_texture == NULL) {
+        printf( "Unable to create font texture! SDL Error: %s\n", SDL_GetError() );
+    }
+
+    SDL_QueryTexture(m_texture, NULL, NULL, &width, &height);    
+}
+
+void Score::updateScore() {
+    SDL_Color color = { 0,0,0 };
+
+    if (surfaceMessage != nullptr) {
+        SDL_FreeSurface(surfaceMessage);
+        surfaceMessage = nullptr;
+    }
+    surfaceMessage = TTF_RenderText_Blended(Sans, std::to_string(score).c_str(), color);
+    m_texture = SDL_CreateTextureFromSurface(m_renderer, surfaceMessage);
+}
