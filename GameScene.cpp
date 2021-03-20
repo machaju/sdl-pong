@@ -3,7 +3,7 @@
 
 GameScene::GameScene() {
 
-     playingField = new PlayingField(SCREEN_WIDTH * .9, SCREEN_HEIGHT * .9);
+     playingField = new PlayingField(SCREEN_WIDTH *.9 , SCREEN_HEIGHT *.9);
 
      ball = new Ball(); 
 
@@ -38,7 +38,7 @@ void GameScene::initScene()
 
     else{
         // create window
-        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        window = SDL_CreateWindow("SDL4Pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
         if(window == nullptr)
         {
@@ -81,8 +81,15 @@ void GameScene::initScene()
 
                     loadImages();
 
-                    ball->setStartingPos((  paddles[0]->width + paddles[0]->x), 
-                                    (paddles[0]->height - (paddles[0]->height /2)) );
+                    // set starting positions
+                    for(auto p : paddles)
+                    {
+                        p->movePaddle((playingField->height/2) - (p->scaled_height/2), playingField->y, playingField->height);
+                        p->setPaddlex(playingField->x, playingField->width);
+                    }
+
+                    ball->setStartingPos((  paddles[0]->scaled_width + paddles[0]->x), 
+                                    (paddles[0]->y) + (paddles[0]->scaled_height / 2) - (ball->height/4));
 
                 
                 }
@@ -104,10 +111,9 @@ void GameScene::renderer(float delta)
    // SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
     // render ball & board
-    if(ball->initState)
-    { 
-        ball->render(screenSurface);
-    }
+ 
+    ball->render(screenSurface);
+    
     
 
     // render paddels
@@ -116,7 +122,6 @@ void GameScene::renderer(float delta)
         it->setPaddlex(playingField->x, playingField->width);
         it->render(screenSurface);  
     }
-
     //Update screen
     SDL_RenderPresent( gRenderer );
 
@@ -131,13 +136,26 @@ void GameScene::mouseMoved(int mousy) {
     {
         if (p->player == 0)
         {
+            // remember to use the scaled position here 
             p->movePaddle(mousy - (p->scaled_height / 2), playingField->y, playingField->height);
 
-            // ball->setStartingPos((  paddles[0]->width + paddles[0]->x), 
-            //                          (mousy - (ball->height/2) ));
-
-            ball->setStartingPos((  paddles[0]->scaled_width + paddles[0]->x), 
+            // if the player hasn't clicked yet, center the ball with the players paddle   
+            if(ball->initState)
+            {
+                ball->setStartingPos((  paddles[0]->scaled_width + paddles[0]->x), 
                                      (mousy - (ball->scaled_height/2) ));
+            }
+        }
+        // update AI paddle
+        else{
+
+            // TODO: add logic here -- keeping centered for now 
+            p->movePaddle((playingField->height/2) - (p->scaled_height/2), playingField->y, playingField->height);
+            //p->setPaddlex(playingField->x, playingField->width);
+
+            // p->movePaddle(100, playingField->y, playingField->height);
+            // p->setPaddlex(300, playingField->width);
+
         }
     }
 }
@@ -148,15 +166,18 @@ void GameScene::event_loop()
     // Lazy Foo the long DELAY seemd to be locking up the processor 
     SDL_Event e;
     bool quit = false;
+    int frameStart = SDL_GetTicks();
+
     while (!quit) {
 
         while(SDL_PollEvent(&e)!= 0) {
             if (e.type == SDL_QUIT) quit = true;
         }
+        
+        int frameTime = SDL_GetTicks() - frameStart;        
 
         float delta = 0.01;
 
-        renderer(delta);
 
         if( e.type == SDL_MOUSEMOTION )
         {
@@ -164,11 +185,44 @@ void GameScene::event_loop()
             int x, y;
             SDL_GetMouseState( &x, &y );
 
-            std::cout << x << ", " << y << std::endl; 
+           // std::cout << x << ", " << y << std::endl; 
 
             mouseMoved(y);
 
         }
+
+        if(e.type == SDL_MOUSEBUTTONDOWN)
+        {
+            //move ball
+            ball->move(1);
+            ball->initState = false; 
+        }
+
+        //move ball
+        if(ball->initState ==false)
+        {
+            ball->move(5); 
+        }
+
+        //check for collisions
+      
+        if((ball->x <= (paddles[0]->x + paddles[0]->scaled_width))
+        && (ball->x > (paddles[0]->x + (paddles[0]->scaled_width * 0.5))) 
+        && ((ball->y <= (paddles[0]->y +  paddles[0]->scaled_height))
+        && (ball->y + ball->scaled_height >= (paddles[0]->y ))))
+        {
+            ball->moveRight(ball->detect_paddle_quad(paddles[0]->y, paddles[0]->scaled_height)); 
+        }
+
+        if((ball->x + ball->scaled_width) >= paddles[1]->x)
+        {
+            ball->moveLeft(ball->detect_paddle_quad(paddles[1]->y, paddles[1]->scaled_height)); 
+        }
+        
+
+
+        // render objects 
+        renderer(delta);
 
         
         //paddles[0]->update(delta);

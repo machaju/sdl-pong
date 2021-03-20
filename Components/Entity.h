@@ -16,17 +16,22 @@ class Entity{
 
     void render(SDL_Surface* srcSurface);
 
+    float x = 0;
+    float y = 0;
 
-    float x, y = 0;
-    int width, height = 0;
-    int scaled_width, scaled_height = 0;
+    int width = 0;
+    int height = 0;
 
+    int scaled_width = 0;
+    int scaled_height = 0;
+    
     //SDL_Surface* m_surface = nullptr;
 
     SDL_Texture* m_texture = nullptr; 
 
     SDL_Renderer* gRenderer;
 
+    // scale the graphics
     float m_scale = 0.5f;
 
 

@@ -23,10 +23,19 @@ class Ball : public Entity
 
         void setStartingPos(int startx, int starty);
 
+        int detect_paddle_quad(int paddle_loc, int paddle_height);
+
+        void moveLeft(int quad);
+
+        void moveRight(int quad);
+
+        void moveAngle(int quad);
+
 
         // int x,y;            // the position of the ball
         // int width, height;  // the size of the ball
-        int dirx, diry;     // the direction of the ball 
+        int dirx=1;
+        float diry = 0.0f;     // the direction of the ball 
 
         bool initState = true; 
 

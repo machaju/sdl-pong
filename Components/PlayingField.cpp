@@ -1,7 +1,7 @@
 #include "PlayingField.h"
 
 
-PlayingField::PlayingField(int width, int height) : width(width), height(height) {
+PlayingField::PlayingField(int w, int h) : width(w), height(h) {
     
     
 }

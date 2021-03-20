@@ -43,7 +43,7 @@ void Paddle::movePaddle(int y, int pfy, int pfheight) {
         this->y = y;
    // }
 
-    std::cout<< "paddle loc: " << this->x << ", " << this->y  << std::endl; 
+//    std::cout<< "paddle loc: " << this->x << ", " << this->y  << std::endl; 
 
 }
 
@@ -58,6 +58,11 @@ void Paddle::setPaddlex(int pfx, int pfwidth) {
     if(player == 1)
     {
         this->x = pfx + pfwidth;
+
+        // std::cout << "PFX: " << pfx << std::endl; 
+        // std::cout << "PFW: " << pfwidth << std::endl; 
+
+        // this->x = 300; 
     }
 }
 
