@@ -9,7 +9,7 @@ Score::~Score() { }
 void Score::initImage(SDL_Renderer* renderer_) {
     m_renderer = renderer_; 
 
-    Sans = TTF_OpenFont("Barlow-Bold.ttf", 24); //this opens a font style and sets a size
+    Sans = TTF_OpenFont("Aileron-Regular.otf", 24); //this opens a font style and sets a size
     if (Sans == NULL) {
         printf( "Unable to load font. Error: %s \n",  TTF_GetError() );
     }
