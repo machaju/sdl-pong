@@ -3,7 +3,7 @@
 
 #include "Entity.h"
 
-enum PQUAD{Q1, Q2, Q3, Q4, Q5};
+enum PQUAD{Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10};
 
 class Ball : public Entity 
 {
@@ -26,7 +26,7 @@ public:
 
     // int x,y;            // the position of the ball
     // int width, height;  // the size of the ball
-    int dirx=1;
+    int   dirx = 1;
     float diry = 0.0f;     // the direction of the ball 
 
     bool initState = true; 

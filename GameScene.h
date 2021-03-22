@@ -4,6 +4,7 @@
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
+const int delta = 16;   // 16 miliseconds
 
 const SDL_Color HOT_PINK = {255,39,210};
 
@@ -44,21 +45,21 @@ public:
     SDL_Renderer*           m_renderer      { nullptr }; 
     SDL_Surface*            screenSurface   { nullptr };
 
-    int m_ai_paddle_speed = 2;
-    int m_ball_speed = 2;
+    int m_ai_paddle_speed = 6;
+    int m_ball_speed = 6;
 
 
-    void renderer(float delat);
+    void renderer();
     void drawDottedLine(SDL_Renderer* renderer, int x0, int y0, int x1, int y1); 
     void initScene();
     void loadImages(); 
     void mouseMoved(int mousy);
 
     void handlePlayerInput(SDL_Event event); 
-    void updateBall();
+    void updateBall(float time_passed);
+    void updateAI(float time_passed); 
     void checkCollisions();
-    void updateAI(); 
-
+    
     void event_loop();
 
 };

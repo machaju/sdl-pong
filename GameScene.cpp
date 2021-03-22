@@ -3,7 +3,7 @@
 GameScene::GameScene() {
 
     // set difficulty
-    DIFFICULTY diff = DIFFICULTY::EASY;
+    DIFFICULTY diff = DIFFICULTY::HARD;
 
     playingField = new PlayingField(SCREEN_WIDTH , SCREEN_HEIGHT);
 
@@ -28,16 +28,16 @@ GameScene::GameScene() {
     switch(diff)
     {
         case DIFFICULTY::EASY:
-            m_ai_paddle_speed = 2;
-            m_ball_speed = 4;
+            m_ai_paddle_speed = 10;
+            m_ball_speed = 12;
             break;
         case DIFFICULTY::MEDIUM:
-            m_ai_paddle_speed = 3;
-            m_ball_speed = 6;
+            m_ai_paddle_speed = 16;
+            m_ball_speed = 21;
             break;
         case DIFFICULTY::HARD:
-            m_ai_paddle_speed = 4;
-            m_ball_speed = 8;
+            m_ai_paddle_speed = 20;
+            m_ball_speed = 24;
             break;
     }
 
@@ -105,33 +105,48 @@ void GameScene::initScene() {
 void GameScene::event_loop() {
     SDL_Event e;
     bool quit = false;
-    int frameStart = SDL_GetTicks();
+    
+    int loopTimer = SDL_GetTicks();
+    Uint64 start = SDL_GetPerformanceCounter();
+    Uint64 end =   0;
+    
+    int frame_timer = SDL_GetTicks();
+    int frame_count = 0;
 
     while (!quit) {
+        // Poll Events
         while(SDL_PollEvent(&e)!= 0) {
             if (e.type == SDL_QUIT) quit = true;
         }
         
-        int frameTime = SDL_GetTicks() - frameStart;        
-        float delta = 0.01;
-
-        // handle player input 
+        // Handle player input 
         handlePlayerInput(e); 
 
         // Move Ball
-        updateBall();
-
+        if (SDL_GetTicks() - loopTimer > 5) {
+            end = SDL_GetPerformanceCounter();
+            float secondsElapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
+            updateBall(secondsElapsed * 100.f);
+            updateAI(secondsElapsed * 100.f);
+            start = SDL_GetPerformanceCounter();
+            loopTimer = SDL_GetTicks();
+        }
+        
         // Check for collisions
         checkCollisions();
         
-        // update AI
-        updateAI();
-        
         // render objects 
-        renderer(delta);
+        renderer();
 
         // SDL_Delay(5);
         
+        // Frames per second
+        ++frame_count;
+        if (SDL_GetTicks() - frame_timer > 1000) {
+	        std::cout << "Current FPS: " << frame_count << std::endl;
+            frame_timer = SDL_GetTicks();
+            frame_count = 0;
+        }
     } 
 }
 
@@ -149,7 +164,7 @@ void GameScene::handlePlayerInput(SDL_Event e) {
 
         // get mouse clicks 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
-            ball->move(m_ball_speed);
+            //ball->move(float(m_ball_speed) / float(delta));
             ball->initState = false; 
         }
 }
@@ -163,14 +178,14 @@ void GameScene::mouseMoved(int mousy) {
             p->movePaddle(mousy - (p->scaled_height / 2), playingField->y, playingField->height);
 
             // if the player hasn't clicked yet, center the ball with the players paddle   
-            if(ball->initState && (ball->x == paddles[PLAYER]->scaled_width + paddles[PLAYER]->x)) {
-                ball->setStartingPos(( ball->x), (mousy - (ball->scaled_height/2) ));
+            if (ball->initState && ((int)ball->x == (int)paddles[PLAYER]->scaled_width + (int)paddles[PLAYER]->x)) {
+                ball->setStartingPos(ball->x, mousy - (ball->scaled_height / 2.f));
             }
 
         // update AI paddle to track mouse/ball movements in init state 
         } else {
-            if(ball->initState && (ball->x + ball->scaled_width == paddles[AI]->x)) {
-                ball->setStartingPos(ball->x, paddles[AI]->mid() - ball->scaled_height/2);
+            if (ball->initState && (ball->x + ball->scaled_width == paddles[AI]->x)) {
+                ball->setStartingPos(ball->x, paddles[AI]->mid() - (ball->scaled_height / 2.f));
             }
         }
     }
@@ -179,24 +194,42 @@ void GameScene::mouseMoved(int mousy) {
 
 // if the ball is not on a player's 
 //paddle, move the ball 
-void GameScene::updateBall()
-{
-    if (ball->initState ==false) {
-        ball->move(m_ball_speed); 
+void GameScene::updateBall(float time_passed) { 
+    if (ball->initState == false) {
+        ball->move(float(m_ball_speed) / time_passed); 
+    }
+}
+
+void GameScene::updateAI(float time_passed) {
+    float paddle_speed = (float)m_ai_paddle_speed / time_passed;
+    float tolerance = paddles[AI]->scaled_height / 8.f;
+
+    // move the AI paddle in the direction of the ball 
+    if (ball->mid() < (paddles[AI]->mid() - tolerance)) {
+        paddles[AI]->y -= paddle_speed;
+
+    } else if (ball->mid() > (paddles[AI]->mid() + tolerance)) {
+        paddles[AI]->y += paddle_speed;
+    
+    // Slow down movement when ball is in the middle of paddle
+    } else {
+        float diff = paddles[AI]->mid() - ball->mid();
+        float adjust = diff / tolerance;
+        paddles[AI]->y -= (paddle_speed * adjust);
     }
 }
 
 // check for collisions with both paddles and check to see if the ball goes off screen
 // if the ball goes off screen, it updates scores and resets the ball on the winner's paddle 
-void GameScene::checkCollisions()
-{
-    // hits players paddel
+void GameScene::checkCollisions() {
+    // hits players paddle
     if ((ball->x <= (paddles[PLAYER]->x + paddles[PLAYER]->scaled_width))
         && (ball->x > (paddles[PLAYER]->x + (paddles[PLAYER]->scaled_width * 0.5))) 
         && ((ball->y <= (paddles[PLAYER]->y +  paddles[PLAYER]->scaled_height))
         && (ball->y + ball->scaled_height >= (paddles[PLAYER]->y )))) {
         ball->moveRight(ball->detectPaddleQuad(paddles[PLAYER]->y, paddles[PLAYER]->scaled_height)); 
     }
+
     // hits ai paddle
     if (((ball->x + ball->scaled_width) >= paddles[AI]->x)
         && (ball->x + ball->scaled_width < (paddles[AI]->x + paddles[AI]->scaled_width * .5)) 
@@ -204,9 +237,12 @@ void GameScene::checkCollisions()
         && (ball->y + ball->scaled_height >= (paddles[AI]->y )))) {
         ball->moveLeft(ball->detectPaddleQuad(paddles[AI]->y, paddles[AI]->scaled_height)); 
     }
+    
     // hits top or bottom of playing field
-    if(ball->top() <= playingField->y || ball->bottom() >= playingField->height) {
-        ball->diry = ball->diry * -1;
+    if(ball->top() <= playingField->y) {
+        ball->diry = abs(ball->diry);
+    } else if (ball->bottom() >= playingField->height) {
+        ball->diry = abs(ball->diry) * -1;
     }
 
     // goes off screen 
@@ -230,17 +266,7 @@ void GameScene::checkCollisions()
     }
 }
 
-void GameScene::updateAI()
-{
-    // move the AI paddle in the direction of the ball 
-    if(ball->bottom() < paddles[AI]->mid()) {
-            paddles[AI]->movePaddle(paddles[AI]->y - m_ai_paddle_speed, playingField->y, playingField->height);
-    } else if(ball->top() > paddles[AI]->mid()) {
-            paddles[AI]->movePaddle(paddles[AI]->y + m_ai_paddle_speed, playingField->y, playingField->height);
-    }
-}
-
-void GameScene::renderer(float delta) {
+void GameScene::renderer() {
     // darw black background 
     SDL_SetRenderDrawColor(m_renderer, 0,0,0,255);
 
@@ -265,7 +291,7 @@ void GameScene::renderer(float delta) {
 
     //Update screen
     SDL_RenderPresent(m_renderer);
-    SDL_UpdateWindowSurface( window );
+    SDL_UpdateWindowSurface(window);
 }
 
 

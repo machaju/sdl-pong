@@ -7,6 +7,7 @@ void Entity::loadImage(std::string path) {
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == NULL) {
         printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+
     } else {
         // Create texture from surface pixels
         m_texture = SDL_CreateTextureFromSurface( m_renderer, loadedSurface );
@@ -16,8 +17,8 @@ void Entity::loadImage(std::string path) {
 
         width = loadedSurface->w;
         height = loadedSurface->h;
-        scaled_width = width * m_scale; 
-        scaled_height = height * m_scale; 
+        scaled_width = (float)width * m_scale; 
+        scaled_height = (float)height * m_scale; 
 
         // Get rid of old loaded surface
         // SDL_FreeSurface( loadedSurface );
@@ -28,7 +29,7 @@ void Entity::render(SDL_Surface* srcSurface) {
     SDL_Rect rect_dst { };
         rect_dst.x = static_cast<int>(x); 
         rect_dst.y = static_cast<int>(y); 
-        rect_dst.w = static_cast<int>((float)width *m_scale);
+        rect_dst.w = static_cast<int>((float)width * m_scale);
         rect_dst.h = static_cast<int>((float)height * m_scale);
 
     SDL_Rect rect_src { }; 
@@ -42,12 +43,11 @@ void Entity::render(SDL_Surface* srcSurface) {
     // SDL_RenderClear( m_renderer );
 
     // Render texture to screen
-    SDL_RenderCopy( m_renderer, m_texture, &rect_src, &rect_dst );    
+    SDL_RenderCopy(m_renderer, m_texture, &rect_src, &rect_dst);    
 }
 
-int Entity::mid() {
-    int mid = y + (scaled_height/2);
-    return mid;     
+float Entity::mid() {
+    return y + (scaled_height / 2.f);     
 }
 
 int Entity::bottom() {

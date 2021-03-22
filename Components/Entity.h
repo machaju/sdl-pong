@@ -19,8 +19,8 @@ public:
     float   y               { 100 };
     int     width           { 100 };
     int     height          { 100 };
-    int     scaled_width    { 100 };
-    int     scaled_height   { 100 };
+    float   scaled_width    { 100 };
+    float   scaled_height   { 100 };
     float   m_scale         { 0.4f };       // scale the graphics
 
 public:
@@ -29,7 +29,7 @@ public:
     void            render(SDL_Surface* srcSurface);
 
     int     top();
-    int     mid(); 
+    float   mid(); 
     int     bottom();
 };
 
