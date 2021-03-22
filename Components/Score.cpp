@@ -9,11 +9,11 @@ Score::~Score() { }
 void Score::initImage(SDL_Renderer* renderer_) {
     m_renderer = renderer_; 
 
-    Sans = TTF_OpenFont("Aileron-Regular.otf", 24); //this opens a font style and sets a size
+    Sans = TTF_OpenFont("Aileron-SemiBold.otf", 120); //this opens a font style and sets a size
     if (Sans == NULL) {
         printf( "Unable to load font. Error: %s \n",  TTF_GetError() );
     }
-    SDL_Color color = { 0,0,0 };
+    SDL_Color color = { 0,255,0 };
 
     // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
     surfaceMessage = TTF_RenderText_Blended(Sans, std::to_string(score).c_str(), color ); 
@@ -28,7 +28,7 @@ void Score::initImage(SDL_Renderer* renderer_) {
 }
 
 void Score::updateScore() {
-    SDL_Color color = { 0,0,0 };
+    SDL_Color color = { 0,255,0 };
 
     if (surfaceMessage != nullptr) {
         SDL_FreeSurface(surfaceMessage);

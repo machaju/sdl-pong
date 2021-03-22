@@ -3,9 +3,6 @@
 
 #include "Entity.h"
 
-
-const float BALL_SPEED = 8;
-
 enum PQUAD{Q1, Q2, Q3, Q4, Q5};
 
 class Ball : public Entity 
@@ -18,7 +15,6 @@ public:
 
     // move the ball x amount of pixels per second
     void move(float seconds);
-    void setDirection(int newdirx, int newdiry);
     void setStartingPos(int startx, int starty);
 
     PQUAD detectPaddleQuad(int paddle_loc, int paddle_height);

@@ -1,12 +1,7 @@
 # sdl-pong
-pong implementation with sdl 
+pong implementation with SDL
 
-
-
-
-
-
-
-
-
-Thanks to AJ_ @  OpenGameArt.org for the graphics! 
+## REQUIREMENTS
+SDL2
+SDL_IMAGE
+SDL_TTF 

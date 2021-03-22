@@ -5,7 +5,7 @@ Ball::~Ball() { }
 
 void Ball::initImage(SDL_Renderer* renderer_) {
     m_renderer = renderer_;
-    loadImage("ball.png");
+    loadImage("glow-ball.png");
 }
 
 void Ball::setStartingPos(int startx, int starty) {
@@ -17,13 +17,6 @@ void Ball::setStartingPos(int startx, int starty) {
 void Ball::move(float seconds) {
     x += dirx * seconds;
     y += diry * seconds;   
-}
-
-void Ball::setDirection(int newdirx, int newdiry) {
-    // Normalize the direction vector and multiply with BALL_SPEED
-    float length = std::sqrt(newdirx * newdirx + newdiry * newdiry);
-    dirx = BALL_SPEED * (newdirx / length);
-    diry = BALL_SPEED * (newdiry / length);    
 }
 
 PQUAD Ball::detectPaddleQuad(int paddel_loc, int paddle_height) {
@@ -69,8 +62,8 @@ void Ball::moveRight(PQUAD quad) {
 
 // TODO: make this more elegant 
 void Ball::moveAngle(PQUAD quad) {
-    float min   = -0.3f;
-    float max   = 0.3f;
+    float min   = -0.2f;
+    float max   = 0.2f;
 
     float random    = ((float) rand()) / (float) RAND_MAX;
     float diff      = max - min;
@@ -80,10 +73,10 @@ void Ball::moveAngle(PQUAD quad) {
     float newy = 0.0f;  
 
     switch(quad) {
-        case Q1:     newy = -0.2f;       break;
-        case Q2:     newy = -0.1f;       break;
+        case Q1:     newy = -0.4f;       break;
+        case Q2:     newy = -0.2f;       break;
         case Q3:     newy = 0.0f;        break;
-        case Q4:     newy = 0.1f;        break;
+        case Q4:     newy = 0.4f;        break;
         case Q5:     newy = 0.2f;        break;
     }
 

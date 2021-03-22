@@ -5,11 +5,9 @@ Paddle::~Paddle() { }
 
 void Paddle::initImage(SDL_Renderer* renderer_) {
     m_renderer = renderer_;
-    if (player == 0) {
-        loadImage("paddle.png");
-    } else{
-        loadImage("glasspaddle2.png");
-    }
+
+    loadImage("glow-paddle.png");
+    
 }
 // move paddle based on mouse y location
 void Paddle::movePaddle(int y, int pfy, int pfheight) {

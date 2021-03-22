@@ -9,13 +9,7 @@
 //  - Playing Field
 //  - Scores
 
-//  Main Functions
-// -------------------
-//  - handelPlayerInput
-//  - updateBall
-//  - checkCollisions
-//  - updateAI 
-//  - Render
+
 
 
 int main(int argc, char* args[]) {
