@@ -123,7 +123,7 @@ void GameScene::event_loop() {
         handlePlayerInput(e); 
 
         // Move Ball
-        if (SDL_GetTicks() - loopTimer > 5) {
+        if (SDL_GetTicks() - loopTimer > 12) {
             end = SDL_GetPerformanceCounter();
             float secondsElapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
             updateBall(secondsElapsed * 100.f);
