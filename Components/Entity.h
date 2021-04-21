@@ -6,6 +6,9 @@
 #include <SDL_image.h>
 #include <iostream>
 
+#include <string>
+
+
 class Entity
 {
 public:

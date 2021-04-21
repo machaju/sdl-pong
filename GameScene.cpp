@@ -101,52 +101,49 @@ void GameScene::initScene() {
                          (paddles[0]->y) + (paddles[0]->scaled_height / 2) - (ball->height/4));
 }
 
+
+void GameScene::frame() {
+    SDL_Event e;   
+
+    // Poll Events
+    while(SDL_PollEvent(&e)!= 0) {
+        if (e.type == SDL_QUIT) m_quit = true;
+    }
+    
+    // Handle player input 
+    handlePlayerInput(e); 
+
+    // Move Ball
+    if (SDL_GetTicks() - m_loopTimer > 12) {
+        m_end = SDL_GetPerformanceCounter();
+        float secondsElapsed = (m_end - m_start) / (float)SDL_GetPerformanceFrequency();
+        updateBall(secondsElapsed * 100.f);
+        updateAI(secondsElapsed * 100.f);
+        m_start = SDL_GetPerformanceCounter();
+        m_loopTimer = SDL_GetTicks();
+    }
+    
+    // Check for collisions
+    checkCollisions();
+    
+    // render objects 
+    renderer();
+
+    // SDL_Delay(5);
+    
+    // Frames per second
+    ++m_frame_count;
+    if (SDL_GetTicks() - m_frame_timer > 1000) {
+        std::cout << "Current FPS: " << m_frame_count << std::endl;
+        m_frame_timer = SDL_GetTicks();
+        m_frame_count = 0;
+    }
+}
+
 // main event loop 
 void GameScene::event_loop() {
-    SDL_Event e;
-    bool quit = false;
-    
-    int loopTimer = SDL_GetTicks();
-    Uint64 start = SDL_GetPerformanceCounter();
-    Uint64 end =   0;
-    
-    int frame_timer = SDL_GetTicks();
-    int frame_count = 0;
-
-    while (!quit) {
-        // Poll Events
-        while(SDL_PollEvent(&e)!= 0) {
-            if (e.type == SDL_QUIT) quit = true;
-        }
-        
-        // Handle player input 
-        handlePlayerInput(e); 
-
-        // Move Ball
-        if (SDL_GetTicks() - loopTimer > 12) {
-            end = SDL_GetPerformanceCounter();
-            float secondsElapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-            updateBall(secondsElapsed * 100.f);
-            updateAI(secondsElapsed * 100.f);
-            start = SDL_GetPerformanceCounter();
-            loopTimer = SDL_GetTicks();
-        }
-        
-        // Check for collisions
-        checkCollisions();
-        
-        // render objects 
-        renderer();
-
-        // SDL_Delay(5);
-        
-        // Frames per second
-        ++frame_count;
-        if (SDL_GetTicks() - frame_timer > 1000) {
-	        std::cout << "Current FPS: " << frame_count << std::endl;
-            frame_timer = SDL_GetTicks();
-            frame_count = 0;
-        }
+    while (!m_quit) {
+        frame();
     } 
 }
 

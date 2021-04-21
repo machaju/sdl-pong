@@ -58,7 +58,7 @@ void Ball::moveAngle(PQUAD quad) {
     float min   = -0.25f;
     float max   =  0.25f;
 
-    float random    = ((float) rand()) / (float) RAND_MAX;
+    float random    = 1.f;//((float) rand()) / (float) RAND_MAX;
     float diff      = max - min;
     float r         = random * diff;
     float noise     = min + r;   

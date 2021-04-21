@@ -60,6 +60,17 @@ public:
     void updateAI(float time_passed); 
     void checkCollisions();
     
+    void frame();
     void event_loop();
+
+private:
+    bool    m_quit = false;
+
+    int     m_loopTimer = SDL_GetTicks();
+    Uint64  m_start = SDL_GetPerformanceCounter();
+    Uint64  m_end =   0;
+    
+    int     m_frame_timer = SDL_GetTicks();
+    int     m_frame_count = 0; 
 
 };
