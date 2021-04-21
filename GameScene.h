@@ -8,7 +8,7 @@ const int delta = 16;   // 16 miliseconds
 
 const SDL_Color HOT_PINK = {255,39,210};
 
-#include <iostream>
+//#include <iostream>
 #include <cstdlib>
 #include <unistd.h>
 #include <vector>

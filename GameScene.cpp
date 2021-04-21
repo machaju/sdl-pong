@@ -55,15 +55,15 @@ GameScene::~GameScene() {
 void GameScene::initScene() {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO < 0)) {
-        std::cout << "SDL cound not initialize! SDL error: " << SDL_GetError() << std::endl;
+        //std::cout << "SDL cound not initialize! SDL error: " << SDL_GetError() << std::endl;
     }
     
     // create window
     window = SDL_CreateWindow("SDL4Pong", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if(window == nullptr) {
-        std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl; 
+        //std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl; 
     }
-    std::cout << "Window created successfully!" << std::endl; 
+    //std::cout << "Window created successfully!" << std::endl; 
 
     //             // get window surface
     // screenSurface = SDL_GetWindowSurface(window); 
@@ -87,7 +87,7 @@ void GameScene::initScene() {
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
-    std::cout << "Initialized Image loading!" << std::endl; 
+    //std::cout << "Initialized Image loading!" << std::endl; 
     
     loadImages();
 
@@ -134,7 +134,7 @@ void GameScene::frame() {
     // Frames per second
     ++m_frame_count;
     if (SDL_GetTicks() - m_frame_timer > 1000) {
-        std::cout << "Current FPS: " << m_frame_count << std::endl;
+        //std::cout << "Current FPS: " << m_frame_count << std::endl;
         m_frame_timer = SDL_GetTicks();
         m_frame_count = 0;
     }
@@ -247,7 +247,7 @@ void GameScene::checkCollisions() {
     if(ball->x > playingField->width) {
         scores[PLAYER]->score ++;
         scores[PLAYER]->updateScore();
-        std::cout << "point for player! -- score: P1: "  << scores[PLAYER]->score << " P2: "<<  scores[AI]->score << std::endl; 
+        //std::cout << "point for player! -- score: P1: "  << scores[PLAYER]->score << " P2: "<<  scores[AI]->score << std::endl; 
         // set starting ball position on PLAYER's paddle
         ball->setStartingPos(paddles[PLAYER]->x + paddles[PLAYER]->scaled_width , paddles[PLAYER]->mid() - ball->scaled_height/2); 
         ball->initState=true; 
@@ -256,7 +256,7 @@ void GameScene::checkCollisions() {
     } else if(ball->x + ball->scaled_width < playingField->x) {
         scores[AI]->score ++; 
         scores[AI]->updateScore();
-        std::cout << "point for AI! -- score: P1: "  << scores[PLAYER]->score << " P2: "<<  scores[AI]->score << std::endl; 
+        //std::cout << "point for AI! -- score: P1: "  << scores[PLAYER]->score << " P2: "<<  scores[AI]->score << std::endl; 
         // Start ball on AI's paddle 
         ball->setStartingPos(paddles[AI]->x - ball->scaled_width, paddles[AI]->mid() - ball->scaled_height/2); 
         ball->initState=true; 
