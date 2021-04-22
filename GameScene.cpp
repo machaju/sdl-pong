@@ -160,7 +160,7 @@ void GameScene::handlePlayerInput(SDL_Event e) {
         }
 
         // get mouse clicks 
-        if (e.type == SDL_MOUSEBUTTONDOWN) {
+        if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_FINGERDOWN) {
             //ball->move(float(m_ball_speed) / float(delta));
             ball->initState = false; 
         }
