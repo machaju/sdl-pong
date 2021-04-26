@@ -151,7 +151,7 @@ void GameScene::event_loop() {
 void GameScene::handlePlayerInput(SDL_Event e) {
 
         // get mouse movements
-        if (e.type == SDL_MOUSEMOTION) {
+        if (e.type == SDL_MOUSEMOTION || e.type == SDL_FINGERMOTION) {
             //Get mouse position
             int x = 0, y = 0;
             SDL_GetMouseState( &x, &y );
