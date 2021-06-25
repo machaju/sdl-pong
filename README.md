@@ -1,11 +1,13 @@
-# sdl-pong
+# sdl-pong 🕹
 Here is a simple pong implementation with SDL2. 
 
 My professional experience mostly deals with developing applications for a headless environment, so this is my first go at actually rendering objects to the screen...  
 
-## Demo 
+
+## Exexute c++ on the web :) 
 asm.js/wasm live demo: https://machaju.github.io/sdl4pong/
 
+Take a look at the top-level CMake for instructions on compiling for the web. Also take note of  `emscripten_set_main_loop(frame_wrapper, 0, 0);` in `main.cpp`. 
 
 
 ## REQUIREMENTS
@@ -14,7 +16,7 @@ asm.js/wasm live demo: https://machaju.github.io/sdl4pong/
 - [SDL_IMAGE](https://www.libsdl.org/projects/SDL_image/)
 - [SDL_TTF](https://www.libsdl.org/projects/SDL_ttf/)
 
-## Building Locally
+## Building Locally 👷‍♀️🚧
 1. Clone the Repo
    
 ``` 
@@ -63,7 +65,7 @@ Try to get the ball past the enemy paddle.
 ## Enemy Paddle
 The Enemy paddle will track the ball "imperfectly" using a buffer to slow the paddle down when it gets close to the ball. 
 
-## Difficulty 
+## Difficulty 🔥
 You can change the difficulty in GameScene.cpp.
 
 Possible selections include: 
