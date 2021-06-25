@@ -66,7 +66,7 @@ Try to get the ball past the enemy paddle.
 The Enemy paddle will track the ball "imperfectly" using a buffer to slow the paddle down when it gets close to the ball. 
 
 ## Difficulty 🔥
-You can change the difficulty in GameScene.cpp.
+You can change the difficulty in [GameScene.cpp](GameScene.cpp).
 
 Possible selections include: 
 
