@@ -34,3 +34,7 @@
 # buid stuff
 /build
 /.vscode
+
+.devcontainer/
+machaju.github.io/
+
