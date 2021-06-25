@@ -17,14 +17,14 @@ Take a look at the top-level CMake for instructions on compiling for the web. Al
 - [SDL_TTF](https://www.libsdl.org/projects/SDL_ttf/)
 
 ## Building Locally 👷‍♀️🚧
-1. Clone the Repo
+### Clone the Repo
    
 ``` 
 > git clone https://github.com/machaju/sdl-pong.git
 Cloning into 'sdl-pong'...
 ```
 
-2. Verify Target System
+### Verify Target System
 
 By default, the target set  is set to "web", which will build .js files instead of a c++ executable.
 
@@ -34,7 +34,7 @@ Change this line from "web" to "auto".
 set(EXPORT_TARGET "auto")
 ```
 
-3. Build the project 
+### Build the project 
 ``` 
 cd sdl-pong
 mkdir build
@@ -44,14 +44,14 @@ make -j4
 sudo make install
 ```
 
-4. Run SDL4Pong
+### Run SDL4Pong
 ```./SDL4Pong```
 
 An SDL window should appear with the game ready to play!  
 
 ![SDL4Pong running locally](/images/SDL4Pong-1.png "SDL4Pong")
 
-5. Play! 
+### Play! 
 
 **Left Click** to begin. 
 
