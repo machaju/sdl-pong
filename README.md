@@ -1,13 +1,15 @@
 # sdl-pong 🕹
 Here is a simple pong implementation with SDL2. 
 
+SDL2 is a cross platfrom library that provides low-level access to computer hardware. It is responsible for the windowing, capturing the user input and rendering the objects to the screen. 
+
 My professional experience mostly deals with developing applications for a headless environment, so this is my first go at actually rendering objects to the screen...  
 
 
 ## Exexute c++ on the web :) 
 asm.js/wasm live demo: https://machaju.github.io/sdl4pong/
 
-Take a look at the top-level CMake for instructions on compiling for the web. Also take note of  `emscripten_set_main_loop(frame_wrapper, 0, 0);` in `main.cpp`. 
+Take a look at the top-level CMake for instructions on compiling for the web. Also take note of  `emscripten_set_main_loop(frame_wrapper, 0, 0);` in [main.cpp](main.cpp). 
 
 
 ## REQUIREMENTS
@@ -15,6 +17,8 @@ Take a look at the top-level CMake for instructions on compiling for the web. Al
 - [SDL2](https://www.libsdl.org/download-2.0.php)
 - [SDL_IMAGE](https://www.libsdl.org/projects/SDL_image/)
 - [SDL_TTF](https://www.libsdl.org/projects/SDL_ttf/)
+
+The CMakeFinds in [cmake/modules](cmake/modules/) should take care of finding these libraries once they are installed.
 
 ## Building Locally 👷‍♀️🚧
 ### Clone the Repo
@@ -28,7 +32,7 @@ Cloning into 'sdl-pong'...
 
 By default, the target set  is set to "web", which will build .js files instead of a c++ executable.
 
-Change this line from "web" to "auto". 
+Change this line in [CMakeLists.txt](CMakeLists.txt) from "web" to "auto". 
 ```
 #edit this line to change compile target 
 set(EXPORT_TARGET "auto")
@@ -41,7 +45,6 @@ mkdir build
 cd build 
 cmake ..
 make -j4
-sudo make install
 ```
 
 ### Run SDL4Pong
