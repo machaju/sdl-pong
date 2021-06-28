@@ -1,9 +1,7 @@
 # sdl-pong 🕹
 Here is a simple pong implementation with SDL2. 
 
-SDL2 is a cross platfrom library that provides low-level access to computer hardware. It is responsible for the windowing, capturing the user input and rendering the objects to the screen. 
-
-My professional experience mostly deals with developing applications for a headless environment, so this is my first go at actually rendering objects to the screen...  
+SDL2 is a cross platfrom library that provides low-level access to computer hardware. It is responsible for the windowing, capturing the user input and rendering the objects to the screen.  
 
 
 ## Exexute c++ on the web :) 
