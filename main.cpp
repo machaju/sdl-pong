@@ -13,13 +13,20 @@
 #include <functional>
 #include "GameScene.h"
 
+// variable to hold GameScene's frame function for emscripten
 std::function<void()> frame_function;
 
+// c style callback function for emscripten_set_main_loop()
+// emscripten_set_main_loop() requires  a c style function, 
+// since c has no sense of objects, we need a creat a 
+// wrapper function to hold the member function
 extern "C" void frame_wrapper() { frame_function(); }
 
 int main(int argc, char* args[]) {
 
     auto scene = new GameScene(); 
+    
+    // attach the frame function from the scene object to frame_function
     frame_function = std::bind(&GameScene::frame, scene);
 
     #if defined (__EMSCRIPTEN__)
