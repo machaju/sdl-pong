@@ -18,7 +18,7 @@ std::function<void()> frame_function;
 
 // c style callback function for emscripten_set_main_loop()
 // emscripten_set_main_loop() requires  a c style function, 
-// since c has no sense of objects, we need a creat a 
+// since c has no sense of objects, we need a create a 
 // wrapper function to hold the member function
 extern "C" void frame_wrapper() { frame_function(); }
 
