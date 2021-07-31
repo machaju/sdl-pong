@@ -26,10 +26,11 @@ public:
     float   scaled_height   { 100 };
     float   m_scale         { 0.4f };       // scale the graphics
 
-public:
     virtual void    initImage(SDL_Renderer* renderer_) { };
     virtual void    loadImage(std::string path); 
     void            render(SDL_Surface* srcSurface);
+
+    void resizeRect(int width,int height);
 
     int     top();
     float   mid(); 

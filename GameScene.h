@@ -38,8 +38,8 @@ public:
 
     Ball*                   ball            { nullptr };
     PlayingField*           playingField    { nullptr };
-    std::vector<Paddle*>    paddles         { }; 
-    std::vector<Score*>     scores          { }; 
+    std::vector<std::shared_ptr<Paddle>>    paddles         { }; 
+    std::vector<std::shared_ptr<Score>>     scores          { }; 
 
     SDL_Window*             window          { nullptr };
     SDL_Renderer*           m_renderer      { nullptr }; 

@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include <iostream>
 
 GameScene::GameScene() {
 
@@ -9,13 +10,14 @@ GameScene::GameScene() {
 
     ball = new Ball(); 
 
-    Paddle *p1 = new Paddle(0);
-    Paddle *p2 = new Paddle(1);
+    std::shared_ptr<Paddle> p1 = std::make_shared<Paddle>(0);
+    std::shared_ptr<Paddle> p2 = std::make_shared<Paddle>(1);
     paddles.push_back(p1);
     paddles.push_back(p2);
 
-    Score *s1 = new Score();
-    Score *s2 = new Score();
+    std::shared_ptr<Score> s1 = std::make_shared<Score>();
+    std::shared_ptr<Score> s2 = std::make_shared<Score>();
+
     s1->x = playingField->width *.25;
     s1->y = playingField->height *.1;
     s2->x = playingField->width *.75;
@@ -276,8 +278,14 @@ void GameScene::renderer() {
         it->render(screenSurface);  
     }
 
+    // render scored
     for (auto it : scores) {
+
         it->render(screenSurface);
+
+        std::cout << "new width: " << it->width << std::endl;
+        std::cout << "new height: " << it->height << std::endl;
+
     }
 
     // draw dotted line

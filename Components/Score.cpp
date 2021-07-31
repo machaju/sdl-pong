@@ -1,5 +1,5 @@
 #include "Score.h"
-
+#include <iostream>
 
 Score::Score() { 
 
@@ -34,6 +34,27 @@ void Score::updateScore() {
         SDL_FreeSurface(surfaceMessage);
         surfaceMessage = nullptr;
     }
+    int curr_digits = check_digits(score); 
+
+    if (curr_digits != digits)
+    {
+        digits = curr_digits; 
+        int newwidth = digits * width;
+        int newheight = height; 
+
+        resizeRect(newwidth, newheight);
+    }
     surfaceMessage = TTF_RenderText_Blended(Sans, std::to_string(score).c_str(), color);
     m_texture = SDL_CreateTextureFromSurface(m_renderer, surfaceMessage);
+}
+
+int Score::check_digits(int number)
+{
+    int check_digits = 0; 
+    while (number != 0) { 
+        number /= 10; 
+        check_digits++; 
+        }
+
+    return check_digits; 
 }

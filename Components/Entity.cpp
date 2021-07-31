@@ -1,6 +1,8 @@
 #include "Entity.h"
 
-Entity::Entity() { }
+Entity::Entity() { 
+
+}
 Entity::~Entity() { }
 
 void Entity::loadImage(std::string path) {
@@ -45,6 +47,13 @@ void Entity::render(SDL_Surface* srcSurface) {
     // Render texture to screen
     SDL_RenderCopy(m_renderer, m_texture, &rect_src, &rect_dst);    
 }
+void Entity::resizeRect(int swidth,int sheight)
+{
+    width =  swidth;
+    height = sheight; 
+
+}
+
 
 float Entity::mid() {
     return y + (scaled_height / 2.f);     
