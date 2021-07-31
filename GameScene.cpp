@@ -283,9 +283,6 @@ void GameScene::renderer() {
 
         it->render(screenSurface);
 
-        std::cout << "new width: " << it->width << std::endl;
-        std::cout << "new height: " << it->height << std::endl;
-
     }
 
     // draw dotted line
